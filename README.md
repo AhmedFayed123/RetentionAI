@@ -14,22 +14,30 @@ Planned functionality has not yet been defined in detail. This repository curren
 
 ```text
 RetentionAI/
+├── artifacts/
+│   ├── figures/            # Figure and visualization outputs
+│   ├── models/             # Model artifacts and checkpoints
+│   └── reports/            # Report outputs
 ├── data/
-│   ├── raw/                 # Source datasets
-│   └── processed/           # Prepared datasets
-├── docs/                    # Project documentation
-├── notebooks/               # Exploratory notebooks
-├── saved_models/            # Trained model artifacts
+│   ├── interim/            # Intermediate datasets
+│   ├── processed/          # Prepared datasets
+│   └── raw/                # Source datasets
+├── docs/                   # Project documentation
+├── logs/                   # Runtime and experiment logs
+├── notebooks/              # Exploratory notebooks
 ├── src/
-│   ├── api/                 # API layer
-│   ├── data/                # Data layer
-│   ├── features/            # Feature engineering
-│   ├── models/              # Model development
-│   ├── services/            # Application services
-│   ├── utils/               # Shared utilities
-│   └── config.py            # Configuration placeholder
-├── tests/                   # Automated tests
-├── requirements.txt         # Python dependencies
+│   ├── api/                # API layer
+│   ├── config/             # Configuration package
+│   ├── data/               # Data layer
+│   ├── evaluation/         # Evaluation utilities
+│   ├── features/           # Feature engineering
+│   ├── models/             # Model development
+│   ├── pipelines/          # Machine learning pipelines
+│   ├── services/           # Application services
+│   ├── utils/              # Shared utilities
+│   └── __init__.py
+├── tests/                  # Automated tests
+├── requirements.txt        # Python dependencies
 ├── .gitignore
 └── README.md
 ```
@@ -41,7 +49,7 @@ RetentionAI/
 
 ## Roadmap
 
-The detailed product and technical roadmap is yet to be defined. The current milestone is establishing and maintaining the project foundation.
+The detailed product and technical roadmap is still being defined. The current milestone is to establish a maintainable project foundation with clear folders for data, artifacts, documentation, notebooks, and future modeling work.
 
 ## Installation
 

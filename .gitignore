@@ -5,7 +5,9 @@ env/
 
 # Python cache and build artifacts
 __pycache__/
+**pycache**/
 *.py[cod]
+*$py.class
 *.egg-info/
 build/
 dist/
