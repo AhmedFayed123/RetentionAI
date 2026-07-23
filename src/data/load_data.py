@@ -1,20 +1,25 @@
 """Utilities for loading project datasets."""
 
+from pathlib import Path
+
 import pandas as pd
 
-from src.config.settings import RAW_DATA_PATH
 
+def load_dataset(file_path: str) -> pd.DataFrame:
+    """Load a dataset from a CSV file path.
 
-def load_dataset() -> pd.DataFrame:
-    """Load the configured raw dataset from CSV format.
+    Args:
+        file_path: Path to the CSV file.
 
     Returns:
-        The raw dataset as a pandas DataFrame.
+        A pandas DataFrame containing the loaded data.
 
     Raises:
-        FileNotFoundError: If the configured raw dataset file does not exist.
+        FileNotFoundError: If the provided file path does not exist.
     """
-    if not RAW_DATA_PATH.is_file():
-        raise FileNotFoundError(f"Raw data file not found: {RAW_DATA_PATH}")
+    path = Path(file_path)
 
-    return pd.read_csv(RAW_DATA_PATH)
+    if not path.is_file():
+        raise FileNotFoundError(f"CSV file not found: {file_path}")
+
+    return pd.read_csv(path)
