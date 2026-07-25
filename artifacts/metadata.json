@@ -1,0 +1,12 @@
+{
+  "model_name": "Logistic Regression",
+  "accuracy": 0.8038379530916845,
+  "precision": 0.649390243902439,
+  "recall": 0.56951871657754,
+  "f1": 0.6068376068376068,
+  "roc_auc": 0.7290962411542105,
+  "dataset": "customer_churn",
+  "training_date": "2026-07-25T09:18:24.669000Z",
+  "python_version": "3.14.4",
+  "sklearn_version": "1.9.0"
+}

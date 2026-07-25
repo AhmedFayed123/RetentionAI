@@ -14,6 +14,8 @@ from src.evaluation.metrics import calculate_metrics
 from src.evaluation.reports import generate_classification_report
 from src.evaluation.comparison import append_model_results, sort_models
 from src.pipelines.preprocessing_pipeline import run_preprocessing_pipeline
+from src.registry.metadata import create_metadata
+from src.registry.model_registry import save_best_model
 
 
 def run_training_pipeline() -> Tuple[Any, str, pd.DataFrame]:
@@ -80,10 +82,26 @@ def run_training_pipeline() -> Tuple[Any, str, pd.DataFrame]:
     model_filename = saved_dir / f"{best_name.replace(' ', '_')}.joblib"
     save_path = save_model(best_model, model_filename)
 
-    # 8. Print training summary
+    # 8. Save artifacts using the registry helpers
+    metrics = comparison_df.loc[comparison_df["model"] == best_name].iloc[0].to_dict()
+    metadata = create_metadata(
+        model_name=best_name,
+        metrics=metrics,
+        dataset_name="customer_churn",
+    )
+    saved_artifacts = save_best_model(
+        model=best_model,
+        scaler=scaler,
+        feature_columns=list(X_train.columns),
+        metadata=metadata,
+        artifacts_dir=Path("artifacts"),
+    )
+
+    # 9. Print training summary
     print("Training summary:")
     print(comparison_df.to_string(index=False))
     print(f"\nSelected best model: {best_name}")
     print(f"Saved best model to: {save_path}")
+    print(f"Saved registry artifacts to: {saved_artifacts['model']}")
 
     return best_model, best_name, comparison_df
