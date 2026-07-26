@@ -1,0 +1,102 @@
+# ============================================================
+# Docker Compose — RetentionAI API (Production)
+# ============================================================
+#
+# Usage:
+#   docker compose up -d          # start
+#   docker compose down           # stop & cleanup
+#   docker compose logs -f        # tail logs
+#   docker compose ps             # show status
+#
+# Environment variables are sourced from the .env file.
+# Copy .env.example → .env and adjust as needed.
+# ============================================================
+
+services:
+  retention-api:
+    # --- Build ---
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: retentionai/api:${IMAGE_TAG:-latest}
+
+    # --- Identity ---
+    container_name: retentionai-api
+    hostname: retentionai-api
+
+    # --- Networking ---
+    # Map the host port (configurable via .env) to the container's 8000.
+    ports:
+      - "${API_PORT:-8000}:8000"
+
+    # --- Environment ---
+    env_file:
+      - .env
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+
+    # --- Volumes ---
+    # logs/       → application logs (writable)
+    # artifacts/  → persisted model artifacts (read-only for safety)
+    volumes:
+      - ./logs:/app/logs
+      - ./artifacts:/app/artifacts:ro
+
+    # --- Restart policy ---
+    restart: unless-stopped
+
+    # --- Health check ---
+    # Mirrors the Dockerfile HEALTHCHECK; used by orchestrators and `docker compose ps`.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; exit(0 if urllib.request.urlopen('http://localhost:8000/health').status == 200 else 1)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+      start_interval: 5s
+
+    # --- Logging ---
+    # Prevent unbounded log growth with rotation.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # --- Security hardening ---
+    # Read-only root filesystem; only mounted volumes and tmpfs are writable.
+    read_only: true
+    # Ephemeral writable scratch space for /tmp.
+    tmpfs:
+      - /tmp
+    # Prevent privilege escalation.
+    security_opt:
+      - no-new-privileges:true
+    # Drop all Linux capabilities (not needed for a pure Python web service).
+    cap_drop:
+      - ALL
+
+    # --- Resource limits ---
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+        reservations:
+          memory: 512M
+          cpus: "0.5"
+
+    # --- Network ---
+    networks:
+      - retentionai-net
+
+# ============================================================
+# Networks
+# ============================================================
+networks:
+  retentionai-net:
+    driver: bridge
+    name: retentionai-net

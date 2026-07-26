@@ -1,0 +1,69 @@
+# Version control
+.git/
+.gitignore
+
+# Python bytecode and build artifacts
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter notebooks (not needed at runtime)
+.ipynb_checkpoints/
+notebooks/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.code-workspace
+
+# MLflow tracking
+mlruns/
+mlartifacts/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Data files (not needed at inference time)
+data/
+*.csv
+
+# Docker files (don't copy into the image)
+Dockerfile
+.dockerignore
+
+# Requirements (only the production file is needed in the image)
+requirements.txt
+requirements.lock
+
+# Tests (not needed at runtime)
+tests/
+
+# Documentation (not needed at runtime)
+docs/
+
+# README
+README.md
+
+# Rewrite script
+rewrite_nb.py
+
+# Inspect script
+inspect_pipeline.py
