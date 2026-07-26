@@ -1,5 +1,7 @@
 """Request schemas for the production API layer."""
 
+from typing import Optional
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -12,9 +14,10 @@ class PredictionRequest(BaseModel):
         validate_assignment=True,
     )
 
-    customerID: str = Field(
-        ...,
-        description="Unique customer identifier from the Telco churn dataset.",
+    customerID: Optional[str] = Field(
+        default=None,
+        description="Unique customer identifier from the Telco churn dataset. "
+        "Optional — used only for tracing/logging, not for prediction.",
         min_length=1,
         json_schema_extra={"example": "7590-VHVEG"},
     )
@@ -133,9 +136,10 @@ class PredictionRequest(BaseModel):
         ge=0,
         json_schema_extra={"example": 29.85},
     )
-    Churn: str = Field(
-        ...,
-        description="Historical churn label for the customer record.",
+    Churn: Optional[str] = Field(
+        default=None,
+        description="Historical churn label for the customer record. "
+        "Optional — not required for prediction; provided only for evaluation.",
         min_length=1,
         json_schema_extra={"example": "No"},
     )
