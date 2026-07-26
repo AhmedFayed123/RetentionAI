@@ -27,7 +27,7 @@ def run_training_pipeline() -> Tuple[Any, str, pd.DataFrame]:
     2. Train Logistic Regression, Decision Tree, and Random Forest models.
     3. Evaluate each model using the reusable evaluation utilities.
     4. Compare models and select the best model by F1 score.
-    5. Save the best model to `saved_models/` and print a training summary.
+    5. Save the best model artifacts to `artifacts/` and print a training summary.
 
     Returns
     -------
@@ -76,13 +76,7 @@ def run_training_pipeline() -> Tuple[Any, str, pd.DataFrame]:
     best_name = comparison_df.iloc[0]["model"]
     best_model = trained_models[best_name]
 
-    # 7. Save best model
-    saved_dir = Path("saved_models")
-    saved_dir.mkdir(parents=True, exist_ok=True)
-    model_filename = saved_dir / f"{best_name.replace(' ', '_')}.joblib"
-    save_path = save_model(best_model, model_filename)
-
-    # 8. Save artifacts using the registry helpers
+    # 7. Save artifacts using the registry helpers
     metrics = comparison_df.loc[comparison_df["model"] == best_name].iloc[0].to_dict()
     metadata = create_metadata(
         model_name=best_name,
@@ -101,7 +95,6 @@ def run_training_pipeline() -> Tuple[Any, str, pd.DataFrame]:
     print("Training summary:")
     print(comparison_df.to_string(index=False))
     print(f"\nSelected best model: {best_name}")
-    print(f"Saved best model to: {save_path}")
     print(f"Saved registry artifacts to: {saved_artifacts['model']}")
 
     return best_model, best_name, comparison_df

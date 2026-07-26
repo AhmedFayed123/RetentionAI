@@ -6,7 +6,7 @@
   "f1": 0.6068376068376068,
   "roc_auc": 0.7290962411542105,
   "dataset": "customer_churn",
-  "training_date": "2026-07-25T09:18:24.669000Z",
+  "training_date": "2026-07-26T12:43:43.558110Z",
   "python_version": "3.14.4",
   "sklearn_version": "1.9.0"
 }

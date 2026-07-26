@@ -23,9 +23,9 @@ def _find_latest_model(saved_dir: Path) -> Path:
 def _find_scaler_possibilities() -> list:
     # common locations used by notebooks and workflows
     return [
+        Path("artifacts") / "best_scaler.joblib",
         Path("artifacts") / "scaler.pkl",
         Path("notebooks") / "artifacts" / "scaler.pkl",
-        Path("saved_models") / "scaler.pkl",
         Path("data") / "processed" / "scaler.pkl",
     ]
 
@@ -82,11 +82,15 @@ def predict_customer(data: Union[dict, pd.Series, pd.DataFrame]) -> Tuple[int, f
     else:
         X_aligned = X_in
 
-    # Load the most recent saved model
-    saved_dir = Path("saved_models")
-    if not saved_dir.exists():
-        raise FileNotFoundError("`saved_models` directory not found; run training pipeline first.")
-    model_path = _find_latest_model(saved_dir)
+    # Load the persisted best model from the production artifacts directory
+    artifacts_dir = Path("artifacts")
+    if not artifacts_dir.exists():
+        raise FileNotFoundError("`artifacts` directory not found; run training pipeline first.")
+
+    model_path = artifacts_dir / "best_model.joblib"
+    if not model_path.exists():
+        model_path = _find_latest_model(artifacts_dir)
+
     model = load_model(model_path)
 
     # Try to load a scaler from common locations; scaler is optional but

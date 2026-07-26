@@ -23,10 +23,6 @@ dist/
 mlruns/
 mlartifacts/
 
-# Saved models
-saved_models/*
-!saved_models/.gitkeep
-
 # Logs
 logs/
 *.log
